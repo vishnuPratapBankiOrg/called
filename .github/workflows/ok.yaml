@@ -1,4 +1,4 @@
-name: hello
+name: jhhj
 
 on:
   repository_dispatch:
