@@ -1,22 +1,22 @@
-name: jhhj
+name: test
 
 on:
-  repository_dispatch:
-    types: [trigger-workflow]
+  # repository_dispatch:
+  #   types: [trigger-workflow]
   workflow_dispatch:
 jobs:
-  build:
+  branch2:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Build Project
-        run: echo "Building the projechhjghjgbt..."
+        run: echo "Building the project branch2 ..."
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: branch2
     environment:
       name: staging
     steps:
