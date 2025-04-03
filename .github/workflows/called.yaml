@@ -13,17 +13,17 @@ on:
 
 env:
   USERNAME: "vishnuPratapBanki"
-#  TOKEN: ${{ secrets.MYTOKEN }}
+  TOKEN: ${{ secrets.MYTOKEN }}
 jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          repository: abc
-          ref: abc
-          token: ${{secrets.token}}
+#        with:
+#          repository: vishnuPratapBanki/environment_testing
+#          ref: main
+#          token: ${{secrets.token}}
 
 
       - name: update branch access for the branch
