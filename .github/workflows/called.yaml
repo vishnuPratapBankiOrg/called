@@ -36,7 +36,7 @@ jobs:
           git config user.name "vishnuPratapBanki"
           
           echo "update version.txt"
-          echo "${{inputs.version}} > version.txt
+          echo "${{inputs.version}}" > version.txt
           
           git add .
           git commit -m "changed the version via wfl"
