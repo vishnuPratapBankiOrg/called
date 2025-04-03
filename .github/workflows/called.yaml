@@ -47,4 +47,4 @@ jobs:
           cat version.txt
 
       - name: restrict branch access
-        run: echo "locking branch again need pr for approval"
+        run: echo "locking branch again need pr for "
