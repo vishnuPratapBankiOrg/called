@@ -28,8 +28,11 @@ jobs:
 #          token: ${{secrets.token}}
 
 
-      - name: update branch access for the branch
-        run: echo "unlocking so that u can push without pr"
+      - name: Remove Branch Protection (Unlock Branch)
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer ${{ secrets.token }}" \
+          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection
 
       - name: update txt
         run: |
@@ -48,5 +51,20 @@ jobs:
           
           cat version.txt
 
-      - name: restrict branch access
-        run: echo "locking branch again need pr for "
+      - name: Apply Branch Protection (Lock Branch)
+        run: |
+          curl -X PUT 
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer ${{ secrets.token }}" \
+          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
+          -d '{
+            "required_status_checks": {
+              "strict": true,
+              "contexts": []
+            },
+            "enforce_admins": true,
+            "required_pull_request_reviews": {
+              "dismiss_stale_reviews": true
+            },
+            "restrictions": null
+          }'
