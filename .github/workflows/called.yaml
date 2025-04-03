@@ -37,13 +37,13 @@ jobs:
           git config user.email "vishnubanki@gmail.com"
           git config user.name "vishnuPratapBanki"
           
+          git pull origin main
+          
           echo "update version.txt"
           echo "${{inputs.version}}" > version.txt
           
           git add .
           git commit -m "changed the version via wfl"
-          
-          git pull --rebase origin main
           git push origin main
           
           cat version.txt
