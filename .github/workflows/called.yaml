@@ -1,0 +1,48 @@
+name: Auto Workflow
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'version for current release'
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+env:
+  USERNAME: "vishnuPratapBanki"
+  TOKEN: ${{secrets.appsToken}}
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          repository: abc
+          ref: abc
+          token: ${{secrets.token}}
+
+
+      - name: update branch access for the branch
+        run: echo "unlocking so that u can push without pr"
+
+      - name: update txt
+        run: |
+          
+          git config user.email "vishnubanki@gmail.com"
+          git config user.name "vishnuPratapBanki"
+          
+          echo "update version.txt"
+          echo "${{inputs.version}} > version.txt
+          
+          git add .
+          git commit -m "changed the version via wfl"
+          git push origin main
+          
+          cat version.txt
+
+      - name: restrict branch access
+        run: echo "locking branch again need pr for approval"
