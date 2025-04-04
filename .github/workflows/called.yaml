@@ -27,22 +27,12 @@ jobs:
         with:
           token: ${{ secrets.token }}
 
-      - name: Disable Repository Rules Temporarily
+      - name: Remove Branch Protection (Unlock Branch)
         run: |
-          echo "Fetching current repository rules..."
-          RULESET_ID=$(curl -s -H "Accept: application/vnd.github+json" \
+          curl -X DELETE \
+          -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.token }}" \
-          https://api.github.com/repos/VishnuPratapBanki/caller/rulesets | jq -r '.[0].id')
-
-          if [[ "$RULESET_ID" != "null" ]]; then
-            echo "Disabling ruleset ID: $RULESET_ID"
-            curl -X PATCH -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.token }}" \
-            https://api.github.com/repos/VishnuPratapBanki/caller/rulesets/$RULESET_ID \
-            -d '{"enforcement": "disabled"}'
-          else
-            echo "No repository rules found. Skipping..."
-          fi
+          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection
 
       - name: Update version.txt and Push Changes
         run: |
