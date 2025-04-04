@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       version:
-        description: 'version for current release'
+        description: 'Version for current release'
         required: true
         type: string
     secrets:
@@ -13,59 +13,61 @@ on:
 
 env:
   USERNAME: "vishnuPratapBanki"
-  TOKEN: ${{ secrets.token  }}
+  TOKEN: ${{ secrets.token }}
+
 jobs:
   update-version:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-#        with:
-#          repository: vishnuPratapBanki/environment_testing
-#          ref: main
-#          token: ${{secrets.token}}
+        with:
+          token: ${{ secrets.token }}
 
-
-      - name: Remove Branch Protection (Unlock Branch)
+      - name: Disable Repository Rules Temporarily
         run: |
-          curl -X DELETE -H "Accept: application/vnd.github.v3+json" \
+          echo "Fetching current repository rules..."
+          RULESET_ID=$(curl -s -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.token }}" \
-          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection
+          https://api.github.com/repos/VishnuPratapBanki/caller/rulesets | jq -r '.[0].id')
 
-      - name: update txt
+          if [[ "$RULESET_ID" != "null" ]]; then
+            echo "Disabling ruleset ID: $RULESET_ID"
+            curl -X PATCH -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.token }}" \
+            https://api.github.com/repos/VishnuPratapBanki/caller/rulesets/$RULESET_ID \
+            -d '{"enforcement": "disabled"}'
+          else
+            echo "No repository rules found. Skipping..."
+          fi
+
+      - name: Update version.txt and Push Changes
         run: |
-          
           git config user.email "vishnubanki@gmail.com"
           git config user.name "vishnuPratapBanki"
-          
-          git pull origin main
-          
-          echo "update version.txt"
-          echo "${{inputs.version}}" > version.txt
-          
+
+          git pull origin main  # Ensure latest changes
+
+          echo "${{ inputs.version }}" > version.txt
+
           git add .
-          git commit -m "changed the version via wfl"
-          git push origin main
-          
+          git commit -m "Changed version via workflow"
+
+          git push https://x-access-token:${{ secrets.token }}@github.com/VishnuPratapBanki/caller.git main
+
           cat version.txt
 
-      - name: Apply Branch Protection (Lock Branch)
+      - name: Reapply Repository Rules
         run: |
-          curl -X PUT 
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.token }}" \
-          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
-          -d '{
-            "required_status_checks": {
-              "strict": true,
-              "contexts": []
-            },
-            "enforce_admins": true,
-            "required_pull_request_reviews": {
-              "require_code_owner_reviews": false,
-              "required_approving_review_count": 1
-            },
-            "restrictions": null
-          }'
+          if [[ "$RULESET_ID" != "null" ]]; then
+            echo "Re-enabling ruleset ID: $RULESET_ID"
+            curl -X PATCH -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.token }}" \
+            https://api.github.com/repos/VishnuPratapBanki/caller/rulesets/$RULESET_ID \
+            -d '{"enforcement": "active"}'
+          else
+            echo "No repository rules found. Skipping..."
+          fi
