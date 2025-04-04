@@ -7,12 +7,14 @@ on:
         description: 'Version for current release'
         required: true
         type: string
-#    secrets:
-#      token:
-#        required: true
+    secrets:
+      MYTOKEN:
+        required: true
+      USER_FINE:
+        required: true
 
 env:
-  USERNAME: "vishnuPratapBanki"
+  USERNAME: "vishnuPratapBankii"
 
 jobs:
   update-version:
