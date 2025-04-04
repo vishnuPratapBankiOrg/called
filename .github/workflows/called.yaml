@@ -55,7 +55,7 @@ jobs:
               "required_approving_review_count": 5,
               "require_last_push_approval": true,
               "bypass_pull_request_allowances": {
-                "users": ["vishnuPratapBankii"]
+                "users": ["vishnuPratapBanki"]
               }
             },
             "restrictions": null,
