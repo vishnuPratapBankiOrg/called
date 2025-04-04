@@ -36,7 +36,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.MY_TOKEN }}" \
             https://api.github.com/repos/VishnuPratapBankiOrg/caller/branches/main/protection \
-            | jq '.bypass_pull_request_allowances'
+            | jq '.required_pull_request_reviews.bypass_pull_request_allowances'
       - name: Temporarily allow collaborator to bypass PR rules
         run: |
           curl -X PUT \
@@ -76,7 +76,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.MY_TOKEN }}" \
             https://api.github.com/repos/VishnuPratapBankiOrg/caller/branches/main/protection \
-            | jq '.bypass_pull_request_allowances'
+            | jq '.required_pull_request_reviews.bypass_pull_request_allowances'
 
       - name: Update version.txt and Push Changes
         run: |
