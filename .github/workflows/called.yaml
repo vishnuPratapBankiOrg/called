@@ -13,7 +13,6 @@ on:
 
 env:
   USERNAME: "vishnuPratapBanki"
-  TOKEN: ${{ secrets.token }}
 
 jobs:
   update-version:
@@ -25,13 +24,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.token }}
+          token: ${{ secrets.USER_FINE }}
 
       - name: Temporarily allow collaborator to bypass PR rules
         run: |
           curl -X PUT \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.owner_token }}" \
+          -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
           https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
           -d '{
             "required_status_checks": {
@@ -61,8 +60,8 @@ jobs:
 
       - name: Update version.txt and Push Changes
         run: |
-          git config user.email "vishnubankii@gmail.com"
-          git config user.name "vishnuPratapBankii"
+          git config user.email "vishnubanki@gmail.com"
+          git config user.name "vishnuPratapBanki"
 
           git pull origin main  # Ensure latest changes
 
@@ -79,7 +78,7 @@ jobs:
         run: |
           curl -X PUT \
           -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.token }}" \
+          -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
           https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
           -d '{
             "required_status_checks": {
