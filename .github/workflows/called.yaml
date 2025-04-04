@@ -34,7 +34,7 @@ jobs:
           echo "Fetching branch protection details..."
           curl -s -X GET \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.MY_TOKEN }}" \
             https://api.github.com/repos/VishnuPratapBankiOrg/caller/branches/main/protection \
             | jq '.bypass_pull_request_allowances'
       - name: Temporarily allow collaborator to bypass PR rules
@@ -74,7 +74,7 @@ jobs:
           echo "Fetching branch protection details..."
           curl -s -X GET \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.MY_TOKEN }}" \
             https://api.github.com/repos/VishnuPratapBankiOrg/caller/branches/main/protection \
             | jq '.bypass_pull_request_allowances'
 
