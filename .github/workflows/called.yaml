@@ -50,14 +50,17 @@ jobs:
 
           cat version.txt
 
-      - name: Reapply Repository Rules
+      - name: Apply Branch Protection (Lock Branch)
         run: |
-          if [[ "$RULESET_ID" != "null" ]]; then
-            echo "Re-enabling ruleset ID: $RULESET_ID"
-            curl -X PATCH -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.token }}" \
-            https://api.github.com/repos/VishnuPratapBanki/caller/rulesets/$RULESET_ID \
-            -d '{"enforcement": "active"}'
-          else
-            echo "No repository rules found. Skipping..."
-          fi
+          curl -X PUT \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer ${{ secrets.token }}" \
+          https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
+          -d '{
+            "required_status_checks": null,
+            "enforce_admins": true,
+            "required_pull_request_reviews": {
+              "required_approving_review_count": 1
+            },
+            "restrictions": null
+          }'
