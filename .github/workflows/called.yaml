@@ -36,8 +36,8 @@ jobs:
 
       - name: Update version.txt and Push Changes
         run: |
-          git config user.email "vishnubankii@gmail.com"
-          git config user.name "vishnuPratapBankii"
+          git config user.email "vishnubanki@gmail.com"
+          git config user.name "vishnuPratapBanki"
 
           git pull origin main  # Ensure latest changes
 
