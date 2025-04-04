@@ -29,7 +29,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.USER_TOKEN }}
-
+      - name: 🔍 Check Current Bypass List
+        run: |
+          echo "Fetching branch protection details..."
+          curl -s -X GET \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
+            https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
+            | jq '.bypass_pull_request_allowances'
       - name: Temporarily allow collaborator to bypass PR rules
         run: |
           curl -X PUT \
@@ -53,7 +60,7 @@ jobs:
             },
             "restrictions": null,
             "required_conversation_resolution": true,
-            "required_signatures": true,
+            "required_signatures": false,
             "allow_force_pushes": true,
             "allow_deletions": true,
             "lock_branch": true,
@@ -61,6 +68,15 @@ jobs:
             "block_creations": true,
             "allow_fork_syncing": true
           }'
+
+      - name: 🔍 Check Current Bypass List
+        run: |
+          echo "Fetching branch protection details..."
+          curl -s -X GET \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.MYTOKEN }}" \
+            https://api.github.com/repos/VishnuPratapBanki/caller/branches/main/protection \
+            | jq '.bypass_pull_request_allowances'
 
       - name: Update version.txt and Push Changes
         run: |
