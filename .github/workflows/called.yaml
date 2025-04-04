@@ -28,7 +28,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MY_TOKEN}}
+          token: ${{ secrets.USER_TOKEN}}
       - name: 🔍 Check Current Bypass List
         run: |
           echo "Fetching branch protection details..."
@@ -89,8 +89,9 @@ jobs:
 
           git add .
           git commit -m "Changed version via workflow"
-
-          git push
+  
+          git remote set-url origin https://x-access-token:${{ secrets.USER_TOKEN }}@github.com/vishnuPratapBankiOrg/caller.git
+          git push origin main
 
           cat version.txt
 
