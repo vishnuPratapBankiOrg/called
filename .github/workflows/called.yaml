@@ -46,7 +46,7 @@ jobs:
           git add .
           git commit -m "Changed version via workflow"
 
-          git push https://x-access-token:${{ secrets.token }}@github.com/VishnuPratapBanki/caller.git main
+          git push
 
           cat version.txt
 
