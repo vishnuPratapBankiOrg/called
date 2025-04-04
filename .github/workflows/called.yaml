@@ -8,10 +8,12 @@ on:
         required: true
         type: string
     secrets:
-      MYTOKEN:
+      MY_TOKEN:
         required: true
       USER_FINE:
         required: true
+      USER_TOKEN:
+          required: true
 
 env:
   USERNAME: "vishnuPratapBankii"
